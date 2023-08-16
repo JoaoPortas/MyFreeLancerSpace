@@ -1,0 +1,39 @@
+{
+  "name": "my-freelancer-space",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/roboto": "^5.0.8",
+    "@formatjs/intl-localematcher": "^0.4.0",
+    "@mui/icons-material": "^5.14.3",
+    "@mui/material": "^5.14.4",
+    "@types/node": "20.4.7",
+    "@types/react": "18.2.18",
+    "@types/react-dom": "18.2.7",
+    "axios": "^1.4.0",
+    "debug": "^4.3.4",
+    "negotiator": "^0.6.3",
+    "next": "13.4.12",
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0",
+    "typescript": "5.1.6"
+  },
+  "devDependencies": {
+    "@emotion/types": "^0.7.0",
+    "@mui/types": "^7.2.4",
+    "@types/axios": "^0.14.0",
+    "@types/negotiator": "^0.6.1"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
+  }
+}

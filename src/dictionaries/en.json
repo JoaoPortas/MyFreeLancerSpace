@@ -1,0 +1,10 @@
+{
+  "authentication": {
+      "signIn": "Login",
+      "username": "Username/email",
+      "accountLoginError": "User doesn't existe or password is wrong",
+      "password": "Password",
+      "keepSignIn": "Keep sign In",
+      "recoveryPassword": "Recovery password"
+  }
+}

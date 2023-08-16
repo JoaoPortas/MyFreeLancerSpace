@@ -1,0 +1,10 @@
+{
+    "authentication": {
+        "signIn": "Entrar",
+        "username": "Nome de utilizador/email",
+        "accountLoginError": "O utilizador não existe ou a password está errada",
+        "password": "Palavra-passe",
+        "keepSignIn": "Manter sessão iniciada",
+        "recoveryPassword": "Recuperar password"
+    }
+}
