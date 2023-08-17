@@ -9,8 +9,6 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { redirect } from 'next/dist/server/api-utils';
-import { useRouter } from 'next/router';
 
 
 function isFormValid(
@@ -37,7 +35,7 @@ export default function LoginFormComponent({ dict }: { dict: any }) {
         }
     }
 
-    const submitLogin = async (event: FormEvent) => {
+    const submitLogin = (event: FormEvent) => {
         event.preventDefault();
       
         const form = event.target as HTMLFormElement;
@@ -45,7 +43,7 @@ export default function LoginFormComponent({ dict }: { dict: any }) {
         const username: string = form.username.value;
         const password: string = form.password.value;
         const keepSession: boolean = form.keepSession.checked;
-        console.log(`${username} - ${password}`);
+        alert(`${username} - ${password}`);
       
         const isFormDataValid: boolean = isFormValid(username, password);
       
@@ -65,6 +63,7 @@ export default function LoginFormComponent({ dict }: { dict: any }) {
         })
         .then(function (response: AxiosResponse) {
             console.log(response.data);
+            alert("Home");
             window.location.href = "/home";
         })
         .catch(function (reason: AxiosError) {
@@ -73,6 +72,7 @@ export default function LoginFormComponent({ dict }: { dict: any }) {
                 setUsernameError(true);
             } else {
                 console.log(reason.response?.status);
+                alert(reason.response?.status);
             }
         });
       };

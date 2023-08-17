@@ -19,7 +19,6 @@ export function middleware(request: NextRequest) {
  
   // Redirect if there is no locale
   if (pathnameIsMissingLocale) {
-    console.log("yap");
     const locale = getLocale(request)
  
     // e.g. incoming request is /products
@@ -33,7 +32,7 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // Skip all internal paths (_next)
-    '/((?!_next|static).*)'
+    '/((?!_next|static|favicon.ico).*)'
     // Optional: only run on root (/) URL
     // '/'
   ],

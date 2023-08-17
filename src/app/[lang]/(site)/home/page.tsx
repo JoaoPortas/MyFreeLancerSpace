@@ -8,6 +8,7 @@ export default async function Home({ params: { lang } }: { params: { lang: Local
         <main>
             <p>Welcome!</p>
             <img src='/static/as.jpg'></img>
+            <a href='/login'>Login page</a>
         </main>
     );
 }
