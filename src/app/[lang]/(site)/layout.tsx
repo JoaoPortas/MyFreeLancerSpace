@@ -3,6 +3,7 @@ import "./global.css";
 import { ReactNode } from "react";
 import { Locale } from "../../../../i18n-config";
 import NavbarComponent from "@/components/common/navbarComponent";
+import Footer from "@/components/common/footer";
 
 export default function RootLayout({ children, params }: { children: ReactNode, params: { lang: Locale } }) {
     return (
@@ -10,7 +11,7 @@ export default function RootLayout({ children, params }: { children: ReactNode, 
         <body>
           <NavbarComponent />
           {children}
-          <p>By JPortas | <a href="/pt/home">PT</a> | <a href="/en/home">EN</a> </p>
+          <Footer />
         </body>
       </html>
     )
