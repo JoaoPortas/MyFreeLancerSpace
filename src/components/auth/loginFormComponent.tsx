@@ -9,6 +9,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { useRouter } from 'next/navigation';
 
 
 function isFormValid(
@@ -25,6 +26,8 @@ function isFormValid(
 }
 
 export default function LoginFormComponent({ dict }: { dict: any }) {
+  const router = useRouter();
+  
     const [usernameHelperText, setUsernameHelper] = useState(null);
     const [hasUsernameError, setUsernameError] = useState(false);
 
@@ -43,8 +46,6 @@ export default function LoginFormComponent({ dict }: { dict: any }) {
         const username: string = form.username.value;
         const password: string = form.password.value;
         const keepSession: boolean = form.keepSession.checked;
-        alert(`${username} - ${password}`);
-      
         const isFormDataValid: boolean = isFormValid(username, password);
       
         if (!isFormDataValid) {
@@ -63,8 +64,12 @@ export default function LoginFormComponent({ dict }: { dict: any }) {
         })
         .then(function (response: AxiosResponse) {
             console.log(response.data);
-            alert("Home");
-            window.location.href = "/home";
+            //window.location.href = "/home";
+            fetch(`/api/auth?email=${response.data.email}&id=${response.data.id}&isSession=${!keepSession}`).then(function (res) {
+              //console.log(res);
+              return router.push('/home');
+            });
+            
         })
         .catch(function (reason: AxiosError) {
             if (reason.response?.status == 401) {
