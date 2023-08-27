@@ -5,11 +5,14 @@ import { Locale } from "../../../../i18n-config";
 import NavbarComponent from "@/components/common/navbarComponent";
 import Footer from "@/components/common/footer";
 import Content from "@/components/page/containers/content";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/ReactToastify.min.css';
 
 export default function RootLayout({ children, params }: { children: ReactNode, params: { lang: Locale } }) {
     return (
         <html lang={params.lang}>
             <body>
+                <ToastContainer />
                 <NavbarComponent />
                 <Content>
                     {children}

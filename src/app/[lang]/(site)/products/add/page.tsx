@@ -54,38 +54,38 @@ export default async function Products({ params: { lang } }: { params: { lang: L
                             size="small"
                         />
                         <Stack direction={{ xs: "row", sm: "row" }} spacing={{ xs: 1, sm: 2 }}>
-                            <BrandSelectBoxComponent sx={{ width: { xs: "100%", sm: "250px" } }}/>
+                            <BrandSelectBoxComponent fullWidth sx={{ width: { xs: "100%", sm: "100%", md: "250px" } }}/>
                             {/*<IconButton sx={{width: { xs: "auto", sm: "auto" }}}><AddIcon /></IconButton>*/}
                         </Stack>
-                        <Stack direction={{ xs: "column", sm: "row" }} spacing={{ xs: 1, sm: 2 }}>
+                        <Stack direction={{ xs: "column", sm: "column",  md: "row"}} spacing={{ xs: 1, sm: 2 }}>
                             <TextField
                                 label="Referência do produto"
                                 id="outlined-size-small"
                                 size="small"
-                                sx={{width: { xs: "100%", sm: "250px" }}}
+                                sx={{width: { xs: "100%", sm: "100%", md: "250px" }}}
                             />
-                            <Button variant="contained" sx={{width: { xs: "100%", sm: "200px" }}}>Obter preço</Button>
+                            <Button disabled variant="contained" sx={{width: { xs: "100%", sm: "100%", md: "250px" }}}>Obter preço</Button>
                         </Stack>
                         <Stack direction={{ xs: "row", sm: "row" }} spacing={{ xs: 1, sm: 2 }}>
-                            <CategorySelectBoxComponent sx={{ width: { xs: "100%", sm: "250px" } }}/>
+                            <CategorySelectBoxComponent sx={{ width: { xs: "100%", sm: "100%", md: "250px" } }}/>
                             {/*<IconButton sx={{width: { xs: "auto", sm: "auto" }}}><AddIcon /></IconButton>*/}
                         </Stack>
-                        <Stack direction={{ xs: "column", sm: "row" }} spacing={{ xs: 1, sm: 2 }}>
+                        <Stack direction={{ xs: "column", sm: "column", md: "row" }} spacing={{ xs: 1, sm: 1, md: 2 }}>
                             <TextField
                                 label="Qtn. por pack"
                                 id="outlined-size-small"
                                 size="small"
-                                sx={{width: { xs: "100%", sm: "250px" }}}
+                                sx={{width: { xs: "100%", sm: "100%", md: "250px" }}}
                             />
-                            <MeasureUnitNormSelectBoxComponent />
+                            <MeasureUnitNormSelectBoxComponent sx={{ width: { xs: "100%", sm: "100%", md: "250px" } }}/>
                         </Stack>
-                        <Stack direction="column" spacing={{ xs: 0, sm: 1 }}>
-                            <Stack direction={{ xs: "column", sm: "row" }} spacing={{ xs: 0, sm: 1 }}>
+                        <Stack direction="column" spacing={{ xs: 0, sm: 0, md: 1 }}>
+                            <Stack direction={{ xs: "column", sm: "column", md: "row" }} spacing={{ xs: 0, sm: 0, md: 1 }}>
                                 <TextField
                                     label="Preço"
                                     id="outlined-size-small"
                                     size="small"
-                                    sx={{width: { xs: "100%", sm: "250px" }}}
+                                    sx={{width: { xs: "100%", sm: "100%", md: "250px" }}}
                                 />
                                 <Box sx={{ display: 'flex', alignItems: 'end' }}><Typography>€ s/Iva</Typography></Box>
                             </Stack>
@@ -100,7 +100,7 @@ export default async function Products({ params: { lang } }: { params: { lang: L
                             label="Descrição"
                             multiline
                         />
-                        <Button variant="contained" sx={{width: { xs: "100%", sm: "400px" }}}>Criar</Button>
+                        <Button variant="contained" sx={{width: { xs: "100%", sm: "100%", md: "250px" }}}>Criar</Button>
                     </Stack>
                 </Grid>                
             </Grid>
