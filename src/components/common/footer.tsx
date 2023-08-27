@@ -4,9 +4,10 @@ import { Box, Container, Paper, Typography } from "@mui/material";
 
 export default function Footer() {
     return (
+      <footer>
       <Paper sx={{marginTop: 'calc(10% + 60px)',
       width: '100%',
-      position: 'fixed',
+      position: 'relative',
       bottom: 0
       }} component="footer" square variant="outlined">
         <Container maxWidth="lg">
@@ -38,5 +39,6 @@ export default function Footer() {
           </Box>
         </Container>
       </Paper>
+      </footer>
     );
   }

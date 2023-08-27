@@ -10,7 +10,6 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
@@ -31,7 +30,7 @@ const pages = [
 			},
 			{
 				key: 'createProduct',
-				href: '/products/create',
+				href: '/products/add',
 				name: 'Novo produto'
 			}
 		]
@@ -74,7 +73,7 @@ export default function NavbarComponent() {
 				variant="h6"
 				noWrap
 				component="a"
-				href="/"
+				href="/home"
 				sx={{
 				mr: 2,
 				display: { xs: 'none', md: 'flex' },
@@ -105,7 +104,7 @@ export default function NavbarComponent() {
 				variant="h5"
 				noWrap
 				component="a"
-				href="/"
+				href="/home"
 				sx={{
 				mr: 2,
 				display: { xs: 'flex', md: 'none' },
