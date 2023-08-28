@@ -97,7 +97,7 @@ export default function MeasureUnitNormSelectBoxComponent({ sx }: { sx?: SxProps
       ];
 
     return (
-        <div style={{width: "100%"}}>
+        <div style={{width: "auto"}}>
             <Autocomplete
                 sx={sx}
                 disablePortal

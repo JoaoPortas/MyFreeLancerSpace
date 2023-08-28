@@ -1,10 +1,9 @@
-import { Box, Button, FormControl, FormHelperText, Grid, IconButton, Input, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
 import { getDictionary } from '../../../dictionaries';
 import { Locale } from "../../../../../../i18n-config";
 import BrandSelectBoxComponent from "@/components/inputs/brandSelectBoxComponent";
 import CategorySelectBoxComponent from "@/components/inputs/categorySelectBoxComponent";
 import MeasureUnitNormSelectBoxComponent from "@/components/inputs/measureUnitNormSelectBoxComponent";
-import AddIcon from '@mui/icons-material/Add';
 
 export default async function Products({ params: { lang } }: { params: { lang: Locale } }) {
     const dict = await getDictionary(lang);
@@ -14,31 +13,13 @@ export default async function Products({ params: { lang } }: { params: { lang: L
             <Grid
                 container
                 spacing={2}
-                flexGrow={ 1 }
             >
-                <Grid item container xs={12} sm={4} md={3} justifyContent="center"> 
-                    <img src="/static/as.jpg" style={{maxWidth: "100%", maxHeight: "300px"}}></img>
+                <Grid item container xs={12} sm={4} md={3} justifyContent="center">
+                <div style={{ width: "95%", height: "0",  paddingBottom: "95%", background: "url('https://sklep.elektrospark.pl/upload/1920/b2efcb49ed6fe51d587750688a86029cb269170d[1].jpg') no-repeat  center", backgroundSize: "cover" }}>
+                    <img src="/static/as.jpg" style={{width: "100%", height: "100%"}}></img>
+                </div>
                 </Grid>
                 <Grid item xs={12} sm={8} md={9}>
-                    {/*<Stack spacing={2}>
-                        <Grid container>
-                            <Grid item xs={6} md={4}>
-                                <TextField
-                                    disabled
-                                    label="ID"
-                                    id="outlined-size-small"
-                                    defaultValue="1"
-                                    size="small"
-                                    sx={{width: "100%"}}
-                                />
-                            </Grid>
-                        </Grid>
-                        <TextField
-                            label="Designação"
-                            id="outlined-size-small"
-                            size="small"
-                        />
-                    </Stack>*/}
                     <Stack spacing={2}>
                         <TextField
                             disabled
@@ -57,7 +38,7 @@ export default async function Products({ params: { lang } }: { params: { lang: L
                             <BrandSelectBoxComponent fullWidth sx={{ width: { xs: "100%", sm: "100%", md: "250px" } }}/>
                             {/*<IconButton sx={{width: { xs: "auto", sm: "auto" }}}><AddIcon /></IconButton>*/}
                         </Stack>
-                        <Stack direction={{ xs: "column", sm: "column",  md: "row"}} spacing={{ xs: 1, sm: 2 }}>
+                        <Stack direction={{ xs: "column", sm: "column",  md: "row"}} spacing={{ xs: 1, sm: 1, md: 2 }}>
                             <TextField
                                 label="Referência do produto"
                                 id="outlined-size-small"
