@@ -4,7 +4,7 @@ import { Button, Autocomplete, TextField, SxProps, Dialog, DialogTitle, DialogCo
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-export default function BrandSelectBoxComponent({ sx, fullWidth = false }: { sx?: SxProps, fullWidth?: boolean }) {
+export default function BrandSelectBoxComponent({ sx, fullWidth = false, name }: { sx?: SxProps, fullWidth?: boolean, name?: string }) {
     const notify = () => {
         toast.success("Marca criada!", { theme: "colored" });
     };
@@ -21,8 +21,9 @@ export default function BrandSelectBoxComponent({ sx, fullWidth = false }: { sx?
     useEffect(() => {
         // Fetch data from the API and update state within useEffect
         fetch(process.env.API_BASE_URL + "api/brands")
-          .then(async (response) => {
-            const responseJSON = await response.json();
+        .then(promise => promise.json())
+          .then((response) => {
+            const responseJSON = response;
             let loadBrands: { label: string; id: number; isButton: boolean }[] = [];
             responseJSON.forEach((element: any) => {
               loadBrands.push({
@@ -37,7 +38,7 @@ export default function BrandSelectBoxComponent({ sx, fullWidth = false }: { sx?
           .catch(err => { console.log(err); });
       }, []); 
 
-    const handleAddNewBrand = async () => {
+    const handleAddNewBrand = () => {
         fetch(process.env.API_BASE_URL + "api/brands", {
             method: "POST",
             body: JSON.stringify({
@@ -47,8 +48,9 @@ export default function BrandSelectBoxComponent({ sx, fullWidth = false }: { sx?
                 "Content-type": "application/json; charset=UTF-8"
             }
         })
-        .then(async (data) => {
-            const newBrandResponse = await data.json();
+        .then(promise => promise.json())
+        .then((data) => {
+            const newBrandResponse = data;
             const brandToAdd: { label: string; id: number, isButton: boolean } = { label: newBrandResponse.name, id: newBrandResponse.id, isButton: false };
             setBrands([...brands, brandToAdd]);
             notify();
@@ -100,8 +102,8 @@ export default function BrandSelectBoxComponent({ sx, fullWidth = false }: { sx?
                 key={1}
                 id="combo-box-demo"
                 options={brands}
-                onChange={(event, value) => console.log(value)}
-                renderInput={(params) => <TextField {...params} size="small" label="Marca"/>}
+                onChange={(event, value) => setSelectedOption(value)}
+                renderInput={(params) => <TextField {...params} inputProps={{...params.inputProps, "data-id": selectedOption?.id}} name={name} size="small" label="Marca"/>}
                 renderOption={(props, option) => {
                     if (option.isButton) {
                         return (

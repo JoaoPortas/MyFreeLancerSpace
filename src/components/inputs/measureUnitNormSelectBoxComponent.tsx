@@ -1,10 +1,10 @@
 'use client';
 
 import { Autocomplete, TextField, SxProps, Button, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEventHandler, ChangeEvent } from "react";
 import { toast } from "react-toastify";
 
-export default function MeasureUnitNormSelectBoxComponent({ sx }: { sx?: SxProps }) {
+export default function MeasureUnitNormSelectBoxComponent({ sx, name, helperText, error, onChange }: { sx?: SxProps, name?: string, helperText?: string | null, error?: boolean, onChange?: any | undefined }) {
     const notify = () => {
         toast.success("Norma de medida criada!", { theme: "colored" });
     };
@@ -12,6 +12,8 @@ export default function MeasureUnitNormSelectBoxComponent({ sx }: { sx?: SxProps
     const [newNormName, setNewNormName] = useState<string>('');
     const [hasNewNormNameError, setNewNormNameError] = useState<boolean>(false);
     const [newNormNameHelper, setNewNormNameHelper] = useState<string | null>();
+
+    const [selectedNormOption, setSelectedNormOption] = useState<{ id: number, label: string, isButton: boolean } | null>(null);
 
     const [open, setOpen] = useState(false);
 
@@ -31,8 +33,9 @@ export default function MeasureUnitNormSelectBoxComponent({ sx }: { sx?: SxProps
     useEffect(() => {
         // Fetch data from the API and update state within useEffect
         fetch(process.env.API_BASE_URL + "api/norms")
-          .then(async (response) => {
-            const responseJSON = await response.json();
+        .then(promise => promise.json())
+          .then((response) => {
+            const responseJSON = response;
             let loadNorms: { id: number, label: string, isButton: boolean }[] = [];
             responseJSON.forEach((element: any) => {
                 loadNorms.push({
@@ -47,7 +50,7 @@ export default function MeasureUnitNormSelectBoxComponent({ sx }: { sx?: SxProps
           .catch(err => { console.log(err); });
     }, []);
 
-    const createNewNorm = async () => {
+    const createNewNorm = () => {
         fetch(process.env.API_BASE_URL + "api/norms", {
             method: "POST",
             body: JSON.stringify({
@@ -57,11 +60,13 @@ export default function MeasureUnitNormSelectBoxComponent({ sx }: { sx?: SxProps
                 "Content-type": "application/json; charset=UTF-8"
             }
         })
-        .then(async (data) => {
-            const newCategoryResponse = await data.json();
+        .then(promise => promise.json())
+        .then((data) => {
+            const newCategoryResponse = data;
             const normToAdd: { label: string; id: number, isButton: boolean } = { id: newCategoryResponse.id, label: newCategoryResponse.name, isButton: false };
             setNorms([...norms, normToAdd]);
             notify();
+            setSelectedNormOption(normToAdd);
         })
         .catch(err => {
             console.log(err);
@@ -103,8 +108,10 @@ export default function MeasureUnitNormSelectBoxComponent({ sx }: { sx?: SxProps
                 disablePortal
                 id="combo-box-demo"
                 options={norms}
-                onChange={(event, value) => console.log(value)}
-                renderInput={(params) => <TextField {...params} size="small" label="Norma de medida"/>}
+                onChange={(event, value) => {setSelectedNormOption(value); onChange(); console.log(event);}}
+                renderInput={(params) => <TextField {...params} inputProps={{...params.inputProps, "data-id": selectedNormOption?.id}} 
+                                                helperText={helperText} error={error} name={name} size="small" label="Norma de medida"
+                                            />}
                 renderOption={(props, option) => {
                     if (option.isButton) {
                         return (

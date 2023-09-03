@@ -4,7 +4,7 @@ import { SxProps, Autocomplete, TextField, Button, Dialog, DialogActions, Dialog
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-export default function CategorySelectBoxComponent({ sx }: { sx?: SxProps }) {
+export default function CategorySelectBoxComponent({ sx, name }: { sx?: SxProps, name?: string }) {
     const notify = () => {
         toast.success("Categoria criada!", { theme: "colored" });
     };
@@ -12,6 +12,8 @@ export default function CategorySelectBoxComponent({ sx }: { sx?: SxProps }) {
     const [newCategoryName, setNewCategoryName] = useState<string>('');
     const [hasNewCategoryNameError, setNewCategoryNameError] = useState<boolean>(false);
     const [newCategoryNameHelper, setNewCategoryNameHelper] = useState<string | null>();
+
+    const [selectedCategoryOption, setSelectedCategoryOption] = useState<{ id: number, label: string, isButton: boolean } | null>(null);
 
     const [open, setOpen] = useState(false);
 
@@ -31,8 +33,9 @@ export default function CategorySelectBoxComponent({ sx }: { sx?: SxProps }) {
     useEffect(() => {
         // Fetch data from the API and update state within useEffect
         fetch(process.env.API_BASE_URL + "api/categories")
-          .then(async (response) => {
-            const responseJSON = await response.json();
+        .then(promise => promise.json())
+          .then((response) => {
+            const responseJSON = response;
             let loadCategories: { id: number, label: string, isButton: boolean }[] = [];
             responseJSON.forEach((element: any) => {
               loadCategories.push({
@@ -47,7 +50,7 @@ export default function CategorySelectBoxComponent({ sx }: { sx?: SxProps }) {
           .catch(err => { console.log(err); });
     }, []);
 
-    const createNewBrand = async () => {
+    const createNewBrand = () => {
         fetch(process.env.API_BASE_URL + "api/categories", {
             method: "POST",
             body: JSON.stringify({
@@ -57,11 +60,13 @@ export default function CategorySelectBoxComponent({ sx }: { sx?: SxProps }) {
                 "Content-type": "application/json; charset=UTF-8"
             }
         })
-        .then(async (data) => {
-            const newCategoryResponse = await data.json();
+        .then(promise => promise.json())
+        .then((data) => {
+            const newCategoryResponse = data;
             const brandToAdd: { label: string; id: number, isButton: boolean } = { id: newCategoryResponse.id, label: newCategoryResponse.name, isButton: false };
             setCategories([...categories, brandToAdd]);
             notify();
+            setSelectedCategoryOption(brandToAdd);
         })
         .catch(err => {
             console.log(err);
@@ -96,8 +101,8 @@ export default function CategorySelectBoxComponent({ sx }: { sx?: SxProps }) {
                 disablePortal
                 id="combo-box-demo"
                 options={categories}
-                onChange={(event, value) => console.log(value)}
-                renderInput={(params) => <TextField {...params} size="small" label="Categoria"/>}
+                onChange={(event, value) => setSelectedCategoryOption(value)}
+                renderInput={(params) => <TextField {...params} inputProps={{...params.inputProps, "data-id": selectedCategoryOption?.id}} name={name} size="small" label="Categoria"/>}
                 renderOption={(props, option) => {
                     if (option.isButton) {
                         return (

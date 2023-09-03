@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { JWTVerifyResult, jwtVerify } from "jose";
-import axios, { AxiosResponse } from 'axios';
  
 let locales = ['pt', 'en'];
 const JWT_TOKEN_KEY: any = process.env.JWT_TOKEN_KEY;
 
-const protectedRoutes = /^(home|profile)/;
+const protectedRoutes = /^(home|profile|products)/;
  
 // Get the preferred locale, similar to above or using a library
 function getLocale(request: NextRequest) { return locales[0]; }
