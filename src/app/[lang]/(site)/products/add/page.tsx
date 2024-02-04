@@ -8,6 +8,7 @@ import MeasureUnitNormSelectBoxComponent from "@/components/inputs/measureUnitNo
 import { FormEvent } from "react";
 import CurrencyTextFieldComponent from "@/components/inputs/currencyTextFieldComponent";
 import { useState } from "react";
+import StockStateSelectBoxComponent from "@/components/inputs/stockStateSelectBoxComponent";
 
 export default function Products({ params: { dict } }: { params: { dict: any } }) {
     const [designationHP, setDesignationHP] = useState<string | null>(null);
@@ -20,6 +21,8 @@ export default function Products({ params: { dict } }: { params: { dict: any } }
     const [hasNormError, setHasNormError] = useState(false);
     const [priceHP, setPriceHP] = useState<string | null>(null);
     const [hasPriceError, setHasPriceError] = useState(false);
+    const [stockStateHP, setStockStateHP] = useState<string | null>(null);
+    const [hasStockStateError, setHasStockStateError] = useState(false);
 
     const [priceWithVat, setPriceWithVat] = useState('0,00');
     const IVA = 1.23;
@@ -38,7 +41,7 @@ export default function Products({ params: { dict } }: { params: { dict: any } }
         setPriceWithVat(newPrice.toFixed(2).replace('.',','));
     }
 
-    function validateForm(designation: any, qtnPerPack: any, norm: any, price: any): boolean {
+    function validateForm(designation: any, qtnPerPack: any, norm: any, price: any, stockState: any): boolean {
         let isValid = true;
 
         if (designation === "" || designation === null) {
@@ -59,6 +62,7 @@ export default function Products({ params: { dict } }: { params: { dict: any } }
         }
 
         if (norm === "" || norm === null) {
+            isValid = false;
             setNormHP("Selecione uma norma");
             setHasNormError(true);
         }
@@ -67,6 +71,12 @@ export default function Products({ params: { dict } }: { params: { dict: any } }
             isValid = false;
             setPriceHP("Campo obrigatório");
             setHasPriceError(true);
+        }
+
+        if (stockState === "" || stockState === null) {
+            isValid = false;
+            setStockStateHP("Selecione um estado");
+            setHasStockStateError(true);
         }
 
         return isValid;
@@ -78,13 +88,15 @@ export default function Products({ params: { dict } }: { params: { dict: any } }
         const form = event.target as HTMLFormElement;
 
         const designation: string = form.designation.value;
-        const brandId: string = form.brand.getAttribute("data-id");
+        const brandId: string | null = form.brand.getAttribute("data-id");
         const productRef: string = form.reference.value;
-        const categoryId: string = form.category.getAttribute("data-id");
+        const categoryId: string | null = form.category.getAttribute("data-id");
         const quantityPerPack: string = form.qtnPerPack.value;
-        const measurementNormId: string = form.measureUnit.getAttribute("data-id");
+        const measurementNormId: string | null = form.measureUnit.getAttribute("data-id");
         const price: string = form.price.value;
         const description: string = form.description.value;
+        const imageFile = form.image_upload.files[0]? form.image_upload.files[0] : null;
+        let stock: string = form.stockState.value;
 
         /*console.log("Brand", brandId);
         console.log("Category", categoryId);
@@ -96,10 +108,32 @@ export default function Products({ params: { dict } }: { params: { dict: any } }
         console.log("4", price);
         console.log("5", description);*/
         
-        const isFormValid = validateForm(designation, quantityPerPack, measurementNormId, price);
+        const isFormValid = validateForm(designation, quantityPerPack, measurementNormId, price, stock);
+        
         
         if (isFormValid) {
-            console.log(true);
+            const data = new FormData();
+            if (imageFile) {
+                data.set('image', imageFile);
+            }
+            data.set('designation', designation);
+            if (brandId) data.set('brandId', brandId);
+            data.set('reference', productRef);
+            if (categoryId) data.set('categoryId', categoryId);
+            data.set('quantityPerPack', quantityPerPack);
+            if (measurementNormId) data.set('normId', measurementNormId);
+            data.set('price', price);
+            data.set('description', description);
+            if (stock !== '') data.set('stockState', stock);
+
+            fetch("/api/products", {
+                method: "POST",
+                body: data
+            })
+            .then(promise => promise.json())
+            .then((res) => {
+                console.log(res);
+            });
         } else {
             console.log(false);
         }
@@ -110,7 +144,7 @@ export default function Products({ params: { dict } }: { params: { dict: any } }
     }
 
     function updateImageName(event: any) {
-        let uploadedImageDisplay = document.getElementById('uploaded_image_display');
+        let uploadedImageDisplay = document.getElementById('uploaded_image_display');//document.getElementById('uploaded_image_display');
         
         const file = event.target.files[0];
 
@@ -124,8 +158,9 @@ export default function Products({ params: { dict } }: { params: { dict: any } }
             const blob = new Blob([reader.result as ArrayBuffer], { type: file.type });
             console.log(blob);
             // Create a URL from the blob and set it as background image
-      const imageUrl = URL.createObjectURL(blob);
-      uploadedImageDisplay?.style.setProperty('background-image', `url(${imageUrl})`);
+            const imageUrl = URL.createObjectURL(blob);
+            //uploadedImageDisplay?.style.setProperty('background-image', `url(${imageUrl})`);
+            uploadedImageDisplay?.setAttribute("src", imageUrl);
             setImageName(file.name);
         };
 
@@ -142,8 +177,8 @@ export default function Products({ params: { dict } }: { params: { dict: any } }
             >
                 <Grid item container xs={12} sm={4} md={3} justifyContent="center">
                     <Stack direction="column" spacing={2} style={{width: "100%", display: "flex", flexDirection: "column", alignItems: "center"}}>
-                        <div id="uploaded_image_display" style={{ width: "95%", height: "0",  paddingBottom: "95%", background: "url('https://sklep.elektrospark.pl/upload/1920/b2efcb49ed6fe51d587750688a86029cb269170d[1].jpg') no-repeat  center", backgroundSize: "cover" }}>
-                            <img src="/static/as.jpg" style={{width: "100%", height: "100%"}}></img>
+                        <div  style={{width: "95%", height: "0", paddingBottom: "95%", position: "relative", overflow: "hidden"}}>
+                            <img id="uploaded_image_display" src="/static/no-product-image.png" style={{position: "absolute", width: "100%", height: "100%", objectFit: "cover"}} />
                         </div>
                         <div style={{display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center"}}>
                             <FormHelperText id="image_name" style={{textAlign: "center"}}>{imageName}</FormHelperText>
@@ -229,7 +264,28 @@ export default function Products({ params: { dict } }: { params: { dict: any } }
                                 <Typography variant="body1">{priceWithVat}€ c/Iva 23%</Typography>
                             </Stack>
                         </Stack>
-                        
+                        <Stack direction={{ xs: "column", sm: "column", md: "row" }} spacing={{ xs: 2, sm: 2, md: 2 }}>
+                            <TextField
+                                label="Qtn. em stock"
+                                id="outlined-size-small"
+                                size="small"
+                                sx={{width: { xs: "100%", sm: "100%", md: "250px" }}}
+                                name="stockAmmount"
+                                type="number"
+                                defaultValue={0}
+                            />
+                            <StockStateSelectBoxComponent 
+                                props={{name: "stockState"}}
+                                sx={{ width: { xs: "100%", sm: "100%", md: "250px" } }}
+                                error={hasStockStateError?true:false} helperText={hasStockStateError?stockStateHP:null}
+                                onChange={() => { 
+                                        if (hasStockStateError) {
+                                            setStockStateHP(null); setHasStockStateError(false)
+                                        }
+                                    }
+                                }
+                            />
+                        </Stack>
                         <TextField
                             id="outlined-multiline-static"
                             label="Descrição"
