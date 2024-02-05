@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, createContext, useState } from 'react';
 
 import { FormControlLabel, FormGroup, Grid, Stack, TextField } from '@mui/material';
 import Typography from '@mui/material/Typography';
@@ -11,6 +11,10 @@ import Link from '@mui/material/Link';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/navigation';
 
+import { authenticate, serverAct } from '@/scripts/auth/auth';
+import { UserAuth } from '@/models/userAuth';
+
+import dict from "@/dictionaries/pt.json";
 
 function isFormValid(
     username: string,
@@ -25,10 +29,10 @@ function isFormValid(
     }
 }
 
-export default function LoginFormComponent({ dict }: { dict: any }) {
-  const router = useRouter();
-  
-    const [usernameHelperText, setUsernameHelper] = useState(null);
+export default function LoginFormComponent() {
+    const router = useRouter();
+
+    const [usernameHelperText, setUsernameHelper] = useState<String | null>(null);
     const [hasUsernameError, setUsernameError] = useState(false);
 
     function onInputUsername() {
@@ -40,14 +44,16 @@ export default function LoginFormComponent({ dict }: { dict: any }) {
 
     const submitLogin = (event: FormEvent) => {
         event.preventDefault();
-      
+
         const form = event.target as HTMLFormElement;
-      
+
         const username: string = form.username.value;
         const password: string = form.password.value;
         const keepSession: boolean = form.keepSession.checked;
         const isFormDataValid: boolean = isFormValid(username, password);
-      
+
+        const userAuth: UserAuth = new UserAuth(username, password, keepSession);
+
         if (!isFormDataValid) {
             setUsernameHelper(dict.authentication.accountLoginError);
             setUsernameError(true);
@@ -56,7 +62,7 @@ export default function LoginFormComponent({ dict }: { dict: any }) {
             setUsernameHelper(null);
             setUsernameError(false);
         }
-      
+
         //trocar por .env var
         axios.post(process.env.API_BASE_URL + "api/users/auth", {
             username: username,
@@ -69,7 +75,7 @@ export default function LoginFormComponent({ dict }: { dict: any }) {
               //console.log(res);
               return router.push('/home');
             });
-            
+
         })
         .catch(function (reason: AxiosError) {
             if (reason.response?.status == 401) {
@@ -81,7 +87,7 @@ export default function LoginFormComponent({ dict }: { dict: any }) {
             }
         });
       };
-    
+
       return (
         <main>
           <Grid
@@ -98,12 +104,12 @@ export default function LoginFormComponent({ dict }: { dict: any }) {
                   <Typography variant="h4" align='center'>Login</Typography>
                 </div>
                 <div className='auth-body-container'>
-                  <form onSubmit={submitLogin}>
+                  <form /*action={authenticate}*/ onSubmit={submitLogin}>
                     <Stack spacing={2}>
-                      <TextField error={hasUsernameError?true:false} helperText={usernameHelperText?dict.authentication.accountLoginError:null} id="username" label={dict.authentication.username} onInput={onInputUsername} variant="outlined" size='small' fullWidth />
-                      <TextField error={hasUsernameError?true:false} id="password" label={dict.authentication.password} variant="outlined" type='password' size='small' fullWidth />
+                      <TextField error={hasUsernameError?true:false} helperText={usernameHelperText?dict.authentication.accountLoginError:null} name='username' id="username" label={dict.authentication.username} onInput={onInputUsername} variant="outlined" size='small' fullWidth />
+                      <TextField error={hasUsernameError?true:false} id="password" label={dict.authentication.password} name='password' variant="outlined" type='password' size='small' fullWidth />
                       <FormGroup>
-                        <FormControlLabel control={<Checkbox id='keepSession' />} label={<Typography variant="body2" color="textSecondary">{dict.authentication.keepSignIn}</Typography>} />
+                        <FormControlLabel control={<Checkbox id='keepSession' name='keepSession' />} label={<Typography variant="body2" color="textSecondary">{dict.authentication.keepSignIn}</Typography>} />
                       </FormGroup>
                       <Link href="recovery-password" variant="body2" underline="none">{dict.authentication.recoveryPassword}</Link>
                       <Button type='submit' variant="contained">{dict.authentication.signIn}</Button>

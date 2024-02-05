@@ -10,7 +10,7 @@ import CurrencyTextFieldComponent from "@/components/inputs/currencyTextFieldCom
 import { useState } from "react";
 import StockStateSelectBoxComponent from "@/components/inputs/stockStateSelectBoxComponent";
 
-export default function Products({ params: { dict } }: { params: { dict: any } }) {
+export default function Products() {
     const [designationHP, setDesignationHP] = useState<string | null>(null);
     const [hasDesignationError, setHasDesigntationError] = useState(false);
     const [productReferenceHP, setProductReferenceHP] = useState<string | null>(null);

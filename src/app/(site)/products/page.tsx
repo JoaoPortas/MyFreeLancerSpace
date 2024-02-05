@@ -1,8 +1,6 @@
 import { Typography, Card, CardMedia } from "@mui/material";
-import { Locale } from "../../../../../i18n-config";
-import { getDictionary } from '../../dictionaries';
 
-export default async function Products({ params: { dict } }: { params: { dict: any } }) {
+export default async function Products() {
     return (
         <main>
             <Typography>Em construção</Typography>

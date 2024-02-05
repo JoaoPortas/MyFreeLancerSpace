@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import "./auth.css";
-import { Locale } from "../../../../i18n-config";
+import { Locale } from "../../../i18n-config";
 
 export default function RootLayout({ children, params }: { children: ReactNode, params: { lang: Locale } }) {
     return (
